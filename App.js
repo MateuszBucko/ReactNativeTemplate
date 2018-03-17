@@ -26,17 +26,14 @@ export default class App extends Component<Props> {
     componentDidMount() {
 
         Permissions.check('location').then(response => {
-            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-            this.setState({ permission: response })
+            this.setState({permission: response})
         });
 
-     /*   _requestPermission = () => {
+        _requestPermission = () => {
             Permissions.request('location').then(response => {
-                // Returns once the user has chosen to 'allow' or to 'not allow' access
-                // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-                this.setState({locationPermission: response})
-            }).catch(error => this.setState({locationPermission: error}))
-        }*/
+                this.setState({permission: response})
+            }).catch(error => this.setState({permission: error}))
+        }
 
         navigator.geolocation.watchPosition(
             (position) => {
@@ -59,10 +56,9 @@ export default class App extends Component<Props> {
         });
 
         const accelerationObservable = new Accelerometer({
-            updateInterval: 100, // defaults to 100ms
+            updateInterval: 100,
         });
 
-        // Normal RxJS functions
         accelerationObservable
             .subscribe(({x, y, z}) => {
                 this.setState({
@@ -76,14 +72,14 @@ export default class App extends Component<Props> {
     }
 
     componentWillUnmount() {
-        // navigator.geolocation.clearWatch(this.watchId);
-        //RNSimpleCompass.stop();
+        navigator.geolocation.clearWatch(this.watchId);
+        RNSimpleCompass.stop();
     }
 
     render() {
         return (
             <View style={{flexGrow: 1, alignItems: 'center', margin: 10}}>
-                <Text>Permission {this.state.permission}</Text>
+                <Text>Permission for location: {this.state.permission}</Text>
                 <Text>Latitude: {this.state.latitude}</Text>
                 <Text>Longitude: {this.state.longitude}</Text>
                 {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
