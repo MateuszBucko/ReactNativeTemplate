@@ -5,10 +5,13 @@ import {
     View
 } from 'react-native';
 import {Accelerometer} from "react-native-sensors";
+import Permissions from 'react-native-permissions'
+
 
 export default class App extends Component<Props> {
     constructor(props) {
         super(props);
+
 
         this.state = {
             latitude: null,
@@ -19,8 +22,23 @@ export default class App extends Component<Props> {
 
     }
 
+
     componentDidMount() {
-        this.watchId = navigator.geolocation.watchPosition(
+
+        Permissions.check('location').then(response => {
+            // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            this.setState({ permission: response })
+        });
+
+     /*   _requestPermission = () => {
+            Permissions.request('location').then(response => {
+                // Returns once the user has chosen to 'allow' or to 'not allow' access
+                // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+                this.setState({locationPermission: response})
+            }).catch(error => this.setState({locationPermission: error}))
+        }*/
+
+        navigator.geolocation.watchPosition(
             (position) => {
                 this.setState({
                     latitude: position.coords.latitude,
@@ -29,10 +47,10 @@ export default class App extends Component<Props> {
                 });
             },
             (error) => this.setState({error: error.message}),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10},
+            {enableHighAccuracy: false, timeout: 10000, maximumAge: 100, distanceFilter: 1},
         );
 
-        const degree_update_rate = 20;
+        const degree_update_rate = 3;
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({
                 compass: degree
@@ -54,18 +72,18 @@ export default class App extends Component<Props> {
                 });
             });
 
-       
 
     }
 
     componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchId);
-        RNSimpleCompass.stop();
+        // navigator.geolocation.clearWatch(this.watchId);
+        //RNSimpleCompass.stop();
     }
 
     render() {
         return (
             <View style={{flexGrow: 1, alignItems: 'center', margin: 10}}>
+                <Text>Permission {this.state.permission}</Text>
                 <Text>Latitude: {this.state.latitude}</Text>
                 <Text>Longitude: {this.state.longitude}</Text>
                 {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
