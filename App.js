@@ -5,7 +5,8 @@ import {
     View
 } from 'react-native';
 import {Accelerometer} from "react-native-sensors";
-import Permissions from 'react-native-permissions'
+import Permissions from 'react-native-permissions';
+import 'expo';
 
 
 export default class App extends Component<Props> {
