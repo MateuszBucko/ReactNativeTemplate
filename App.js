@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import RNSimpleCompass from 'react-native-simple-compass';
 import {
     Text,
-    View
+    View,
+    Animated,
 } from 'react-native';
 import {Accelerometer} from "react-native-sensors";
 import Permissions from 'react-native-permissions'
@@ -12,14 +13,14 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
 
-
         this.state = {
             latitude: null,
             longitude: null,
             error: null,
+            accelerometerZ: 0,
+            accelerometerY: 0,
+            accelerometerX: 0,
         };
-
-
     }
 
 
@@ -84,12 +85,23 @@ export default class App extends Component<Props> {
                 <Text>Longitude: {this.state.longitude}</Text>
                 {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
                 <Text>Compass: {this.state.compass}</Text>
-                <Text> Accelerometer:</Text>
-                <Text>X {this.state.accelerometerX}</Text>
-                <Text>Y {this.state.accelerometerY}</Text>
-                <Text>Z {this.state.accelerometerZ}</Text>
+
+                <Animated.View style={{
+                    width: 200, height: 200, backgroundColor: 'red', transform: [
+                        {
+                            translateX: -this.state.accelerometerX*10,
+
+                        },
+                        {
+                            translateY: -(this.state.accelerometerZ-9.81)*20,
+                        }
+                    ]
+                }}/>
             </View>
+
         );
     }
+
 }
+
 
