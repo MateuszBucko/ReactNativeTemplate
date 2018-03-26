@@ -30,11 +30,6 @@ export default class App extends Component<Props> {
             this.setState({permission: response})
         });
 
-        _requestPermission = () => {
-            Permissions.request('location').then(response => {
-                this.setState({permission: response})
-            }).catch(error => this.setState({permission: error}))
-        }
 
         navigator.geolocation.watchPosition(
             (position) => {
@@ -89,11 +84,11 @@ export default class App extends Component<Props> {
                 <Animated.View style={{
                     width: 200, height: 200, backgroundColor: 'red', transform: [
                         {
-                            translateX: -this.state.accelerometerX*10,
+                            translateX: -this.state.accelerometerX * 10,
 
                         },
                         {
-                            translateY: -(this.state.accelerometerZ-9.81)*20,
+                            translateY: -(this.state.accelerometerZ - 9.81) * 20,
                         }
                     ]
                 }}/>
