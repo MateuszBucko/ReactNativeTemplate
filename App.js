@@ -6,8 +6,18 @@ import MainList from './Screens/MainList';
 import Details from './Screens/Details';
 
 const Navigation = StackNavigator({
-    Home: {screen: MainList},
-    DetailsView: {screen: Details}
+    Home: {
+        screen: MainList, navigationOptions: ({navigation}) => ({
+            title: `Lista wiadomości`,
+            headerStyle: {backgroundColor: 'yellow'},
+        }),
+
+    },
+    DetailsView: {
+        screen: Details, navigationOptions: ({navigation}) => ({
+            title: `${navigation.state.params.article.title}`,
+        }),
+    }
 });
 
 export default Navigation;
