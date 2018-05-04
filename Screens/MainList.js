@@ -72,7 +72,7 @@ export default class MainList extends Component<Props> {
         });
     }
 
-    searchCars() {
+    searchCars = () => {
         var p = new Promise(function (resolve, reject) {
             db.transaction((tx) => {
                 tx.executeSql("SELECT * FROM Car;", [], (tx, results) => {
@@ -87,9 +87,11 @@ export default class MainList extends Component<Props> {
             });
         });
 
-        return p.then((result) => {
-             return result;
-        });
+        p.then((res) => {
+           this.setState({res})
+       })
+
+        return this.state.res;
 
     };
 
@@ -121,9 +123,9 @@ export default class MainList extends Component<Props> {
                 <Button title="Wyszukaj"
                         color="#841584"
                     onPress={() =>
-                        navigate('SearchResultView', {data: this.searchCars})
+                        navigate('SearchResultView', {data: this.searchCars()})
                     }
-                            /* onPress={this.searchCars}*/
+                           /*  onPress={this.searchCars()}*/
                 />
 
                 <ListView
