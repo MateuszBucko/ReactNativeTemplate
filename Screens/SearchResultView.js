@@ -28,23 +28,21 @@ export default class SearchResultView extends Component<Props> {
                 }}
             />
         );
-    }
+    };
+
 
     render() {
-       // const {navigate} = this.props.navigation;
+        // const {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        //var data =  ds.cloneWithRows(params.data);
         console.warn(params);
-        /*let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-            data: ds.cloneWithRows(params),
-        });*/
 
         return (
-            <View/>
-            /*{<ScrollView>
-                <ListView
+            <ScrollView>
+                {/*<ListView
                     enableEmptySections
-                    dataSource={this.state.data}
+                    dataSource={data}
                     renderSeparator={this.ListViewItemSeparator}
                     renderRow={(rowData) =>
                         <View>
@@ -59,9 +57,9 @@ export default class SearchResultView extends Component<Props> {
                             />
                         </View>
                     }
-                />
+                />*/}
 
-            </ScrollView>}*/
+            </ScrollView>
 
 
         );

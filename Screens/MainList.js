@@ -6,6 +6,7 @@ import {
     Button,
     Image,
     ScrollView,
+    TouchableOpacity,
     TextInput
 } from 'react-native';
 import SearchResultView from "./SearchResultView";
@@ -23,6 +24,28 @@ function insert(brand, model, power, color, photo) {
     return sql;
 }
 
+function prepareSelect(model, brand) {
+    var sql = "SELECT * FROM Car"
+    if ((model != null && model.length > 0) || (brand != null && brand.length > 0)) {
+        sql += " WHERE "
+    } else {
+        return sql + ";"
+    }
+
+    if (model != null && model.length > 0) {
+        sql += "UPPER(model) = " + "'" + model.toUpperCase() + "' "
+    }
+
+    if (brand != null && brand.length > 0 && (model != null && model.length > 0)) {
+        sql += "AND UPPER(brand) = " + "'" + brand.toUpperCase() + "' ";
+    } else if (brand != null && brand.length > 0) {
+        sql += "UPPER(brand) = " + "'" + brand.toUpperCase() + "' "
+    }
+
+    return sql;
+}
+
+var arr = [];
 var db = SQLite.openDatabase({name: "sqliteexample.db", createFromLocation: 1});
 SQLite.enablePromise(true);
 
@@ -37,7 +60,7 @@ export default class MainList extends Component<Props> {
             tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
             tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
             tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
-            tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
+            tx.executeSql(insert("Ford", "Focus", 110, "Srebrmy", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/2017_Ford_Focus_Zetec_Edition_1.0_Front.jpg/1200px-2017_Ford_Focus_Zetec_Edition_1.0_Front.jpg"));
 
 
         });
@@ -57,7 +80,7 @@ export default class MainList extends Component<Props> {
         };
 
         db.transaction((tx) => {
-            tx.executeSql("SELECT * FROM Car", [], (tx, results) => {
+            tx.executeSql("SELECT * FROM Car;", [], (tx, results) => {
                 var temp = [];
                 var len = results.rows.length;
                 for (let i = 0; i < len; i++) {
@@ -72,10 +95,14 @@ export default class MainList extends Component<Props> {
         });
     }
 
+
     searchCars = () => {
+
+        var sql = prepareSelect(this.state.modelSearch, this.state.brandSearch);
+
         var p = new Promise(function (resolve, reject) {
             db.transaction((tx) => {
-                tx.executeSql("SELECT * FROM Car;", [], (tx, results) => {
+                tx.executeSql(sql, [], (tx, results) => {
                     var temp = [];
                     var len = results.rows.length;
                     for (let i = 0; i < len; i++) {
@@ -86,12 +113,14 @@ export default class MainList extends Component<Props> {
                 });
             });
         });
-
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         p.then((res) => {
-           this.setState({res})
-       })
+            this.setState({
+                data: ds.cloneWithRows(res),
+            })
+        });
 
-        return this.state.res;
+        return this.state.searchData;
 
     };
 
@@ -122,10 +151,10 @@ export default class MainList extends Component<Props> {
                 <TextInput placeholder="Model" onChangeText={(text) => this.setState({modelSearch: text})}/>
                 <Button title="Wyszukaj"
                         color="#841584"
-                    onPress={() =>
+                    /*onPress={() =>
                         navigate('SearchResultView', {data: this.searchCars()})
-                    }
-                           /*  onPress={this.searchCars()}*/
+                    }*/
+                        onPress={this.searchCars}
                 />
 
                 <ListView
@@ -134,15 +163,19 @@ export default class MainList extends Component<Props> {
                     renderSeparator={this.ListViewItemSeparator}
                     renderRow={(rowData) =>
                         <View>
-                            <Text style={{
-                                textAlign: 'center',
-                                fontWeight: "bold"
-                            }}>{rowData.brand} {rowData.model} {rowData.power}km {rowData.color}</Text>
+                            <TouchableOpacity onPress={() =>
+                                navigate('CarDetails', {car: rowData})
+                            }>
+                                <Text style={{
+                                    textAlign: 'center',
+                                    fontWeight: "bold"
+                                }}>{rowData.brand} {rowData.model} {rowData.power}km {rowData.color}</Text>
 
-                            <Image
-                                style={{width: null, height: 200}}
-                                source={{uri: rowData.photos}}
-                            />
+                                <Image
+                                    style={{width: null, height: 200}}
+                                    source={{uri: rowData.photos}}
+                                />
+                            </TouchableOpacity>
                         </View>
                     }
                 />
