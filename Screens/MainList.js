@@ -19,13 +19,13 @@ function insert(brand, model, power, color, photo) {
         + "'" + model + "',"
         + power + ","
         + "'" + color + "',"
-        + "'" + photo + "');"
+        + "'" + photo + "');";
 
     return sql;
 }
 
 function prepareSelect(model, brand) {
-    var sql = "SELECT * FROM Car"
+    var sql = "SELECT * FROM Car";
     if ((model != null && model.length > 0) || (brand != null && brand.length > 0)) {
         sql += " WHERE "
     } else {
@@ -33,19 +33,18 @@ function prepareSelect(model, brand) {
     }
 
     if (model != null && model.length > 0) {
-        sql += "UPPER(model) = " + "'" + model.toUpperCase() + "' "
+        sql += "UPPER(model) LIKE " + "'%" + model.toUpperCase() + "%' "
     }
 
     if (brand != null && brand.length > 0 && (model != null && model.length > 0)) {
-        sql += "AND UPPER(brand) = " + "'" + brand.toUpperCase() + "' ";
+        sql += "AND UPPER(brand) LIKE " + "'%" + brand.toUpperCase() + "%' ";
     } else if (brand != null && brand.length > 0) {
-        sql += "UPPER(brand) = " + "'" + brand.toUpperCase() + "' "
+        sql += "UPPER(brand) LIKE " + "'%" + brand.toUpperCase() + "%' "
     }
 
     return sql;
 }
 
-var arr = [];
 var db = SQLite.openDatabase({name: "sqliteexample.db", createFromLocation: 1});
 SQLite.enablePromise(true);
 
@@ -57,9 +56,7 @@ export default class MainList extends Component<Props> {
             tx.executeSql('CREATE TABLE IF NOT EXISTS `Car` (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,`brand` TEXT NOT NULL,`model` TEXT NOT NULL,`power` INTEGER,`color` TEXT,`photos` TEXT);');
             tx.executeSql(insert("Mazda", "6", 120, "Niebieska", "https://img01-olxpl.akamaized.net/img-olxpl/659092883_1_644x461_mazda-6-23-02-07-hatchback-niebieska-wszystkie-czesci-trzebnica.jpg1"));
             tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
-            tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
-            tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
-            tx.executeSql(insert("Mazda", "5", 110, "Srebrna", "https://www.wyborkierowcow.pl/wp-content/uploads/2017/07/Mazda-5-bok-2.jpg"));
+            tx.executeSql(insert("Reanult", "Megane", 300, "Biały", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/2017_Renault_Megane_Dynamique_S_NAV_DC_1.5_Front.jpg/1200px-2017_Renault_Megane_Dynamique_S_NAV_DC_1.5_Front.jpg"));
             tx.executeSql(insert("Ford", "Focus", 110, "Srebrmy", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/2017_Ford_Focus_Zetec_Edition_1.0_Front.jpg/1200px-2017_Ford_Focus_Zetec_Edition_1.0_Front.jpg"));
 
 
