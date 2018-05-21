@@ -10,8 +10,10 @@
     "list-react-files": "^0.2.0",
     "react": "16.3.0-alpha.1",
     "react-native": "0.54.1",
+    "react-native-fs": "^2.9.12",
     "react-native-permissions": "^1.1.1",
-    "react-native-sound": "^0.10.9"
+    "react-native-sound": "^0.10.9",
+    "react-native-vector-icons": "^4.6.0"
   },
   "devDependencies": {
     "babel-jest": "22.4.1",
