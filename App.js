@@ -1,23 +1,24 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-    Text,
-} from 'react-native';
+    StackNavigator,
+} from 'react-navigation';
+import MainView from './Screens/MainView';
+import AddRecipeView from "./Screens/AddRecipeView";
 
 
-export default class App extends Component<Props> {
-    constructor(props) {
-        super(props);
-
+const Navigation = StackNavigator({
+        Home: {
+            screen: MainView,
+        },
+        AddRecipeView: {
+            screen: AddRecipeView,
+        }
+    }, {
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
     }
+);
 
-
-    render() {
-        return (
-            <Text>Test</Text>
-
-        );
-    }
-
-}
-
-
+export default Navigation;
