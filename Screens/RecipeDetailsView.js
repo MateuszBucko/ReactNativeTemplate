@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 
-
 export default class RecipeDetailsView extends Component<Props> {
 
 
@@ -27,7 +26,7 @@ export default class RecipeDetailsView extends Component<Props> {
 
 
         return (
-            <ScrollView >
+            <ScrollView>
                 <Text style={styles.headerText}>{recipe.name}</Text>
 
 
