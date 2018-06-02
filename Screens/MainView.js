@@ -7,10 +7,13 @@ import {
     ScrollView,
     ListView,
     TouchableOpacity,
-    ActivityIndicator, StyleSheet
+    ActivityIndicator,
+    StyleSheet,
+    Image,
 } from 'react-native';
 
-const URL = "http://192.168.1.8:8085/"
+const URL = "http://192.168.1.8:8085/";
+const EMPTY_IMAGE_URL = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
 
 export default class MainView extends Component<Props> {
@@ -106,10 +109,21 @@ export default class MainView extends Component<Props> {
                     marginTop: 5,
                     marginBottom: 5
 
-                }}
-            >
+                }}>
                 <Text style={styles.headerText}>Przepisy</Text>
+
+                <View
+                    style={{
+                        height: 2,
+                        width: "100%",
+                        backgroundColor: "#000",
+                        marginTop: 5,
+                        marginBottom: 5
+
+                    }}
+                />
             </View>
+
         )
 
     }
@@ -130,6 +144,16 @@ export default class MainView extends Component<Props> {
 
         return (
             <ScrollView>
+                <View style={styles.container}>
+
+                    <Button
+                        title="Dodaj przepis"
+                        onPress={() =>
+                            navigate('AddRecipeView')}/>
+                    <Button title="Odśwież"
+                            onPress={() => this.refresh()}/>
+
+                </View>
 
                 <ListView
                     dataSource={this.state.data}
@@ -141,20 +165,21 @@ export default class MainView extends Component<Props> {
                             <TouchableOpacity onPress={() =>
                                 navigate('RecipeDetailsView', {recipe: rowData})
                             }>
-                                <Text style={{textAlign: 'center', fontWeight: "bold"}}>{rowData.name}</Text>
+                                <Text style={styles.titleText}>{rowData.name}</Text>
+
+
+                                <Image
+                                    style={styles.image}
+                                    source={{uri: rowData.imageUrl, cache: 'reload'}}
+                                    onError={() => rowData.imageUrl = EMPTY_IMAGE_URL}
+                                />
 
                             </TouchableOpacity>
+
                         </View>
                     }
                 />
-                <Button
-                    title="Dodaj przepis"
-                    style={{marginTop: 15}}
-                    onPress={() =>
-                        navigate('AddRecipeView')}/>
-                <Button title="Odśwież"
-                        style={{marginTop: 15, paddingTop: 15}}
-                        onPress={() => this.refresh()}/>
+
             </ScrollView>
         );
     }
@@ -167,6 +192,26 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    titleText: {
+        textAlign: 'center',
+        fontWeight: "bold",
+        fontSize: 16,
+    },
+    image: {
+        width: null,
+        height: 0,
+        marginBottom: 0
+    },
+    container: {
+        flex: 0.01,
+        //flexDirection: 'col',
+        justifyContent: 'space-between',
+    },
+    button: {
+        backgroundColor: 'green',
+        width: '40%',
+        height: 40
     }
 });
 

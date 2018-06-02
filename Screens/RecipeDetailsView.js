@@ -3,7 +3,7 @@ import {
     Text,
     View,
     TextInput,
-    Button,
+    Image,
     ScrollView,
     StyleSheet
 } from 'react-native';
@@ -21,13 +21,33 @@ export default class RecipeDetailsView extends Component<Props> {
     }
 
 
-
     render() {
         var {params} = this.props.navigation.state;
         var recipe = params.recipe;
+
+
         return (
             <ScrollView >
-                <Text>{recipe.name}</Text>
+                <Text style={styles.headerText}>{recipe.name}</Text>
+
+
+                <View style={styles.separator}/>
+
+                <Text style={styles.middleText}>Składniki:</Text>
+                <Text>{recipe.ingredients}</Text>
+
+                <View style={styles.separator}/>
+
+                <Text style={styles.middleText}>Opis przygotowania:</Text>
+                <Text>{recipe.description}</Text>
+
+                <View style={styles.separator}/>
+
+                <Image
+                    style={styles.image}
+                    source={{uri: recipe.imageUrl}}
+                />
+
             </ScrollView>
         );
     }
@@ -35,4 +55,30 @@ export default class RecipeDetailsView extends Component<Props> {
 
 }
 
+
+const styles = StyleSheet.create({
+    separator: {
+        height: 2,
+        width: "100%",
+        backgroundColor: "#000",
+        marginTop: 5,
+        marginBottom: 5
+    },
+    image: {
+        width: null,
+        height: 300,
+        marginBottom: 15
+    },
+    headerText: {
+        color: '#ef3210',
+        fontSize: 25,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    middleText: {
+        color: '#000000',
+        fontSize: 15,
+        fontWeight: 'bold',
+    }
+});
 

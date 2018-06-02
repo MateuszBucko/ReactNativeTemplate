@@ -21,7 +21,8 @@ export default class AddRecipeView extends Component<Props> {
         this.state = {
             name: "",
             ingredients: "",
-            description: ""
+            description: "",
+            imageUrl: "",
         }
 
 
@@ -42,6 +43,7 @@ export default class AddRecipeView extends Component<Props> {
                     name: this.state.name,
                     ingredients: this.state.ingredients,
                     description: this.state.description,
+                    imageUrl: this.state.imageUrl,
                 })
             });
 
@@ -57,6 +59,7 @@ export default class AddRecipeView extends Component<Props> {
             this.name.clear();
             this.ingredients.clear();
             this.description.clear();
+            this.imageUrl.clear();
 
 
         } catch (e) {
@@ -99,6 +102,14 @@ export default class AddRecipeView extends Component<Props> {
                            }}
                            numberOfLines={12}
                            onChangeText={(text) => this.setState({description: text})}/>
+                <TextInput style={styles.input}
+                           placeholder="Link do zdjęcia w serwisie zewnętrznym"
+                           multiline={true}
+                           ref={element => {
+                               this.imageUrl = element
+                           }}
+                           numberOfLines={2}
+                           onChangeText={(text) => this.setState({imageUrl: text})}/>
                 <Button title="Dodaj przepis"
                         onPress={this.addNewRecipe.bind(this)}/>
             </ScrollView>
