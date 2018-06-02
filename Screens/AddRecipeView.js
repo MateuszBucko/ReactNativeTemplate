@@ -76,6 +76,7 @@ export default class AddRecipeView extends Component<Props> {
 
 
     render() {
+        
         const {navigate} = this.props.navigation;
         return (
             <ScrollView style={styles.backgroudView}>
