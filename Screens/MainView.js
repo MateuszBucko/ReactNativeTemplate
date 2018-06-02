@@ -7,13 +7,15 @@ import {
     ScrollView,
     ListView,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator, StyleSheet
 } from 'react-native';
 
 const URL = "http://192.168.1.8:8085/"
 
 
 export default class MainView extends Component<Props> {
+
+    header = "Przepisy";
 
     async setItem(key, value) {
         try {
@@ -95,8 +97,27 @@ export default class MainView extends Component<Props> {
             });
     }
 
+    renderHeader() {
+        return (
+            <View
+                style={{
+                    width: "100%",
+                    backgroundColor: "#000",
+                    marginTop: 5,
+                    marginBottom: 5
+
+                }}
+            >
+                <Text style={styles.headerText}>Przepisy</Text>
+            </View>
+        )
+
+    }
+
 
     render() {
+
+
         const {navigate} = this.props.navigation;
 
         if (this.state.isLoading) {
@@ -112,6 +133,8 @@ export default class MainView extends Component<Props> {
 
                 <ListView
                     dataSource={this.state.data}
+                    enableEmptySections={true}
+                    renderHeader={this.renderHeader}
                     renderSeparator={this.ListViewItemSeparator}
                     renderRow={(rowData) =>
                         <View>
@@ -130,6 +153,7 @@ export default class MainView extends Component<Props> {
                     onPress={() =>
                         navigate('AddRecipeView')}/>
                 <Button title="Odśwież"
+                        style={{marginTop: 15, paddingTop: 15}}
                         onPress={() => this.refresh()}/>
             </ScrollView>
         );
@@ -137,5 +161,13 @@ export default class MainView extends Component<Props> {
 
 }
 
+const styles = StyleSheet.create({
+    headerText: {
+        color: '#ef3210',
+        fontSize: 25,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
+});
 
 
