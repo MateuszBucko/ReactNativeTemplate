@@ -4,6 +4,7 @@ import {
 } from 'react-navigation';
 import MainView from './Screens/MainView';
 import AddRecipeView from "./Screens/AddRecipeView";
+import RecipeDetailsView from "./Screens/RecipeDetailsView";
 
 
 const Navigation = StackNavigator({
@@ -12,6 +13,9 @@ const Navigation = StackNavigator({
         },
         AddRecipeView: {
             screen: AddRecipeView,
+        },
+        RecipeDetailsView: {
+            screen: RecipeDetailsView,
         }
     }, {
         headerMode: 'none',

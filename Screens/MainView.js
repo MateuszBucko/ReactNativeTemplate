@@ -96,7 +96,6 @@ export default class MainView extends Component<Props> {
     }
 
 
-
     render() {
         const {navigate} = this.props.navigation;
 
@@ -116,7 +115,9 @@ export default class MainView extends Component<Props> {
                     renderSeparator={this.ListViewItemSeparator}
                     renderRow={(rowData) =>
                         <View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() =>
+                                navigate('RecipeDetailsView', {recipe: rowData})
+                            }>
                                 <Text style={{textAlign: 'center', fontWeight: "bold"}}>{rowData.name}</Text>
 
                             </TouchableOpacity>
